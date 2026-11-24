@@ -1,0 +1,11 @@
+customerID,gender,SeniorCitizen,tenure,PhoneService,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,Churn
+7590-VHVEG,Female,0,1,No,Month-to-month,Yes,Electronic check,29.85,No
+5575-GNVDE,Male,0,34,Yes,One year,No,Mailed check,56.95,No
+3668-QPYBK,Male,0,2,Yes,Month-to-month,Yes,Mailed check,53.85,Yes
+7795-CFOCW,Male,0,45,No,One year,No,Bank transfer,42.3,No
+9237-HQITU,Female,0,2,Yes,Month-to-month,Yes,Electronic check,70.7,Yes
+9305-CDSKC,Female,0,8,Yes,Month-to-month,Yes,Electronic check,99.65,Yes
+1452-KIOVK,Male,0,22,Yes,Month-to-month,Yes,Credit card,89.1,No
+6713-OKOMC,Female,0,10,No,Month-to-month,No,Mailed check,29.75,No
+7892-POOKP,Female,0,28,Yes,Month-to-month,Yes,Electronic check,104.8,Yes
+6388-TABGU,Male,0,62,Yes,One year,No,Bank transfer,56.15,No
