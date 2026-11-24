@@ -37,6 +37,20 @@ export const ModelComparison = () => {
   // Filter trained models by active task
   const taskModels = trainedModels.filter((m) => m.task === activeTask);
 
+  // Switch task and ensure models are selected for smooth UX
+  const handleTaskSwitch = (newTask) => {
+    setActiveTask(newTask);
+    const newModels = trainedModels.filter((m) => m.task === newTask);
+    const currentlySelectedInTask = newModels.filter((m) => comparisonModelIds.includes(m.id));
+    if (currentlySelectedInTask.length < 2 && newModels.length >= 2) {
+      newModels.slice(0, 2).forEach((m) => {
+        if (!comparisonModelIds.includes(m.id)) {
+          toggleComparisonModel(m.id);
+        }
+      });
+    }
+  };
+
   // Selected models for comparison (only those matching activeTask)
   const selectedModels = taskModels.filter((m) => comparisonModelIds.includes(m.id));
 
@@ -117,7 +131,7 @@ export const ModelComparison = () => {
             </span>
             <div className="flex items-center bg-slate-100 p-1 rounded-xl">
               <button
-                onClick={() => setActiveTask('Regression')}
+                onClick={() => handleTaskSwitch('Regression')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
                   activeTask === 'Regression'
                     ? 'bg-white text-blue-700 shadow-xs'
@@ -128,7 +142,7 @@ export const ModelComparison = () => {
                 <span>Regression Models</span>
               </button>
               <button
-                onClick={() => setActiveTask('Classification')}
+                onClick={() => handleTaskSwitch('Classification')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
                   activeTask === 'Classification'
                     ? 'bg-white text-emerald-700 shadow-xs'

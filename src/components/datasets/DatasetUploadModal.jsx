@@ -81,22 +81,9 @@ export const DatasetUploadModal = ({ isOpen, onClose }) => {
         }
       });
     } else {
-      // For Excel files in Phase 1, simulate schema preview
-      setParsedPreview({
-        rows: 1200,
-        columns: 8,
-        columnDetails: [
-          { name: 'Feature_1', type: 'Float', missing: 0, unique: 450, sample: '14.2' },
-          { name: 'Feature_2', type: 'Integer', missing: 0, unique: 12, sample: '3' },
-          { name: 'Category', type: 'Category', missing: 0, unique: 4, sample: 'Type_A' },
-          { name: 'Target', type: 'Float (Target)', missing: 0, unique: 800, sample: '105.4' }
-        ],
-        sampleRows: [
-          { Feature_1: 14.2, Feature_2: 3, Category: 'Type_A', Target: 105.4 },
-          { Feature_1: 18.9, Feature_2: 1, Category: 'Type_B', Target: 92.1 }
-        ],
-        suggestedTarget: 'Target'
-      });
+      // Excel (.xlsx/.xls) notice for Phase 1
+      setError('Phase 1 Notice: Native binary Excel (.xlsx/.xls) parsing is reserved for Phase 2 backend ingestion. For client-side preview in Phase 1, please upload your dataset in CSV format.');
+      setParsedPreview(null);
     }
   };
 
@@ -194,7 +181,7 @@ export const DatasetUploadModal = ({ isOpen, onClose }) => {
                 {selectedFile ? selectedFile.name : 'Click to browse or drag & drop file'}
               </div>
               <p className="text-xs text-slate-400">
-                Supports CSV, XLSX or XLS (up to 50MB)
+                Supports CSV (Client-side parsed). Note: XLSX parsing is scheduled for Phase 2 backend.
               </p>
             </div>
           </div>
