@@ -32,7 +32,7 @@ export const MLProvider = ({ children }) => {
     return ['model-reg-001', 'model-reg-002'];
   });
 
-  // Active training simulation state
+  // Active single-model training simulation state
   const [trainingSimulation, setTrainingSimulation] = useState({
     isRunning: false,
     progress: 0,
@@ -40,6 +40,63 @@ export const MLProvider = ({ children }) => {
     config: null,
     completedModel: null
   });
+
+  // Active multi-model training simulation state
+  const [multiTrainingJob, setMultiTrainingJob] = useState({
+    isRunning: false,
+    datasetName: '',
+    targetColumn: '',
+    task: 'Regression',
+    overallProgress: 0,
+    currentStepMessage: '',
+    modelsStatus: [],
+    results: []
+  });
+
+  // Theme state ('light' | 'dark' | 'system')
+  const [theme, setThemeState] = useState(() => {
+    return localStorage.getItem('ml_studio_theme') || 'light';
+  });
+
+  const applyThemeDOM = (targetTheme) => {
+    if (typeof window === 'undefined') return;
+    const isDark =
+      targetTheme === 'dark' ||
+      (targetTheme === 'system' &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const root = document.documentElement;
+    const body = document.body;
+
+    if (isDark) {
+      root.classList.add('dark');
+      if (body) body.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+      if (body) body.classList.remove('dark');
+    }
+  };
+
+  const setTheme = (newTheme) => {
+    applyThemeDOM(newTheme);
+    setThemeState(newTheme);
+    try {
+      localStorage.setItem('ml_studio_theme', newTheme);
+    } catch (e) {
+      console.warn('Could not save theme preference', e);
+    }
+  };
+
+  useEffect(() => {
+    applyThemeDOM(theme);
+
+    if (theme === 'system' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const listener = () => applyThemeDOM('system');
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    }
+  }, [theme]);
 
   // Toast notification system
   const [toasts, setToasts] = useState([]);
@@ -111,6 +168,80 @@ export const MLProvider = ({ children }) => {
   const clearComparisonModels = () => {
     setComparisonModelIds([]);
     addToast('Cleared model comparison selection.', 'info');
+  };
+
+  const setSpecificComparisonModels = (ids) => {
+    setComparisonModelIds(ids);
+  };
+
+  // Helper to generate realistic simulated metrics per algorithm family
+  const generateSimulatedMetrics = (algorithmId, task) => {
+    const isReg = task === 'Regression';
+    const rand = (min, max, dec = 4) => Number((min + Math.random() * (max - min)).toFixed(dec));
+
+    if (isReg) {
+      switch (algorithmId) {
+        case 'xgboost-regressor':
+          return { r2: rand(0.91, 0.95), adjustedR2: rand(0.90, 0.94), mae: rand(0.22, 0.27), mse: rand(0.11, 0.16), rmse: rand(0.33, 0.40) };
+        case 'gradient-boosting-regressor':
+          return { r2: rand(0.89, 0.93), adjustedR2: rand(0.88, 0.92), mae: rand(0.25, 0.30), mse: rand(0.14, 0.19), rmse: rand(0.37, 0.43) };
+        case 'random-forest-regressor':
+          return { r2: rand(0.87, 0.92), adjustedR2: rand(0.86, 0.91), mae: rand(0.27, 0.32), mse: rand(0.16, 0.21), rmse: rand(0.40, 0.46) };
+        case 'support-vector-regression':
+          return { r2: rand(0.82, 0.87), adjustedR2: rand(0.81, 0.86), mae: rand(0.33, 0.38), mse: rand(0.22, 0.28), rmse: rand(0.47, 0.53) };
+        case 'knn-regressor':
+          return { r2: rand(0.79, 0.85), adjustedR2: rand(0.78, 0.84), mae: rand(0.36, 0.41), mse: rand(0.25, 0.31), rmse: rand(0.50, 0.56) };
+        case 'polynomial-regression':
+          return { r2: rand(0.77, 0.83), adjustedR2: rand(0.76, 0.82), mae: rand(0.38, 0.43), mse: rand(0.27, 0.33), rmse: rand(0.52, 0.57) };
+        case 'decision-tree-regressor':
+          return { r2: rand(0.75, 0.82), adjustedR2: rand(0.74, 0.81), mae: rand(0.40, 0.45), mse: rand(0.30, 0.36), rmse: rand(0.55, 0.60) };
+        case 'linear-regression':
+        default:
+          return { r2: rand(0.67, 0.74), adjustedR2: rand(0.66, 0.73), mae: rand(0.46, 0.52), mse: rand(0.42, 0.50), rmse: rand(0.65, 0.71) };
+      }
+    } else {
+      switch (algorithmId) {
+        case 'xgboost-classifier':
+          return { accuracy: rand(0.93, 0.96), precision: rand(0.91, 0.95), recall: rand(0.90, 0.94), f1Score: rand(0.90, 0.94), rocAuc: rand(0.97, 0.99) };
+        case 'gradient-boosting-classifier':
+          return { accuracy: rand(0.92, 0.95), precision: rand(0.90, 0.94), recall: rand(0.89, 0.93), f1Score: rand(0.89, 0.93), rocAuc: rand(0.96, 0.98) };
+        case 'random-forest-classifier':
+          return { accuracy: rand(0.90, 0.94), precision: rand(0.88, 0.92), recall: rand(0.87, 0.91), f1Score: rand(0.87, 0.91), rocAuc: rand(0.95, 0.97) };
+        case 'support-vector-machine':
+          return { accuracy: rand(0.87, 0.91), precision: rand(0.85, 0.89), recall: rand(0.84, 0.88), f1Score: rand(0.84, 0.88), rocAuc: rand(0.92, 0.95) };
+        case 'knn-classifier':
+          return { accuracy: rand(0.84, 0.88), precision: rand(0.82, 0.86), recall: rand(0.81, 0.85), f1Score: rand(0.81, 0.85), rocAuc: rand(0.89, 0.93) };
+        case 'decision-tree-classifier':
+          return { accuracy: rand(0.83, 0.87), precision: rand(0.81, 0.85), recall: rand(0.80, 0.84), f1Score: rand(0.80, 0.84), rocAuc: rand(0.86, 0.90) };
+        case 'logistic-regression':
+          return { accuracy: rand(0.81, 0.86), precision: rand(0.79, 0.84), recall: rand(0.77, 0.82), f1Score: rand(0.78, 0.83), rocAuc: rand(0.87, 0.91) };
+        case 'naive-bayes':
+        default:
+          return { accuracy: rand(0.79, 0.84), precision: rand(0.77, 0.82), recall: rand(0.75, 0.80), f1Score: rand(0.76, 0.81), rocAuc: rand(0.84, 0.88) };
+      }
+    }
+  };
+
+  const getSimulatedDuration = (algorithmId) => {
+    const times = {
+      'linear-regression': '0.4s',
+      'polynomial-regression': '0.9s',
+      'decision-tree-regressor': '0.8s',
+      'random-forest-regressor': '2.9s',
+      'support-vector-regression': '3.6s',
+      'knn-regressor': '1.1s',
+      'gradient-boosting-regressor': '2.4s',
+      'xgboost-regressor': '1.8s',
+      'logistic-regression': '0.5s',
+      'decision-tree-classifier': '0.7s',
+      'random-forest-classifier': '2.8s',
+      'support-vector-machine': '4.1s',
+      'knn-classifier': '1.2s',
+      'naive-bayes': '0.3s',
+      'gradient-boosting-classifier': '2.5s',
+      'xgboost-classifier': '1.9s'
+    };
+    return times[algorithmId] || '1.5s';
   };
 
   // Simulated model training for frontend demonstration
@@ -207,6 +338,130 @@ export const MLProvider = ({ children }) => {
     });
   };
 
+  // Multi-model training simulation for parallel / batch training
+  const startMultiModelTrainingSimulation = (payload, onComplete) => {
+    const { dataset, targetColumn, task, trainRatio, randomState, models } = payload;
+    if (!models || models.length === 0) return;
+
+    const initialStatuses = models.map((m, idx) => ({
+      id: `temp-${idx}`,
+      name: m.name,
+      algorithmId: m.algorithmId,
+      algorithmName: m.algorithmName,
+      status: 'pending',
+      progress: 0,
+      duration: getSimulatedDuration(m.algorithmId),
+      metrics: null,
+      hyperparameters: m.hyperparameters || {}
+    }));
+
+    setMultiTrainingJob({
+      isRunning: true,
+      datasetName: dataset.name,
+      targetColumn: targetColumn || dataset.targetColumn || 'target',
+      task,
+      overallProgress: 10,
+      currentStepMessage: `Initializing training batch for ${models.length} models...`,
+      modelsStatus: initialStatuses,
+      results: []
+    });
+
+    let currentModelIdx = 0;
+    const completedModelsList = [];
+
+    const interval = setInterval(() => {
+      if (currentModelIdx < models.length) {
+        const activeModel = models[currentModelIdx];
+        const simulatedMetrics = generateSimulatedMetrics(activeModel.algorithmId, task);
+        const duration = getSimulatedDuration(activeModel.algorithmId);
+
+        const finishedModel = {
+          id: `model-${Date.now()}-${currentModelIdx}`,
+          name: activeModel.name,
+          algorithmId: activeModel.algorithmId,
+          algorithmName: activeModel.algorithmName,
+          task,
+          datasetId: dataset.id,
+          datasetName: dataset.name,
+          targetColumn: targetColumn || dataset.targetColumn || 'target',
+          status: 'Completed',
+          trainingTime: duration,
+          createdAt: new Date().toISOString().replace('T', ' ').substring(0, 16),
+          splitRatio: `${trainRatio || 80} / ${100 - (trainRatio || 80)}`,
+          randomState: randomState || 42,
+          hyperparameters: activeModel.hyperparameters || {},
+          metrics: simulatedMetrics,
+          isSimulated: true
+        };
+
+        completedModelsList.push(finishedModel);
+
+        setMultiTrainingJob((prev) => {
+          const updatedStatuses = prev.modelsStatus.map((ms, idx) => {
+            if (idx === currentModelIdx) {
+              return {
+                ...ms,
+                status: 'completed',
+                progress: 100,
+                metrics: simulatedMetrics,
+                modelId: finishedModel.id
+              };
+            }
+            if (idx === currentModelIdx + 1) {
+              return {
+                ...ms,
+                status: 'training',
+                progress: 50
+              };
+            }
+            return ms;
+          });
+
+          const progressPercent = Math.round(((currentModelIdx + 1) / models.length) * 100);
+
+          return {
+            ...prev,
+            overallProgress: progressPercent,
+            currentStepMessage: `Completed ${currentModelIdx + 1} of ${models.length}: ${activeModel.name}`,
+            modelsStatus: updatedStatuses,
+            results: [...completedModelsList]
+          };
+        });
+
+        currentModelIdx++;
+      } else {
+        clearInterval(interval);
+
+        // Append all new models to trainedModels
+        setTrainedModels((prev) => [...completedModelsList, ...prev]);
+
+        setMultiTrainingJob((prev) => ({
+          ...prev,
+          isRunning: false,
+          overallProgress: 100,
+          currentStepMessage: `All ${models.length} model simulations completed successfully.`,
+          results: [...completedModelsList]
+        }));
+
+        addToast(`Successfully trained ${models.length} models simultaneously!`, 'success');
+        if (onComplete) onComplete(completedModelsList);
+      }
+    }, 600);
+  };
+
+  const resetMultiTraining = () => {
+    setMultiTrainingJob({
+      isRunning: false,
+      datasetName: '',
+      targetColumn: '',
+      task: 'Regression',
+      overallProgress: 0,
+      currentStepMessage: '',
+      modelsStatus: [],
+      results: []
+    });
+  };
+
   return (
     <MLContext.Provider
       value={{
@@ -218,12 +473,18 @@ export const MLProvider = ({ children }) => {
         comparisonModelIds,
         toggleComparisonModel,
         clearComparisonModels,
+        setSpecificComparisonModels,
         trainingSimulation,
         startTrainingSimulation,
         resetSimulation,
+        multiTrainingJob,
+        startMultiModelTrainingSimulation,
+        resetMultiTraining,
         toasts,
         addToast,
-        removeToast
+        removeToast,
+        theme,
+        setTheme
       }}
     >
       {children}

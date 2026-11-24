@@ -5,109 +5,129 @@ import {
   Search,
   Bell,
   ChevronRight,
-  Info,
-  CheckCircle2,
-  ExternalLink,
   Sliders,
-  User,
   ShieldCheck,
-  Check
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useML } from '../../context/MLContext';
 
 export const Header = ({ isCollapsed, setMobileOpen, onOpenSearch }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { trainedModels, datasets } = useML();
+  const { trainedModels, datasets, theme, setTheme, addToast } = useML();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   // Map path to title and category
   const routeTitles = {
-    '/': { title: 'Dashboard', category: 'Workspace', subtitle: 'Overview of datasets, models and ML metrics' },
-    '/datasets': { title: 'Datasets', category: 'Workspace', subtitle: 'Upload, inspect and preprocess data' },
-    '/train': { title: 'Model Training', category: 'Workspace', subtitle: 'Configure hyperparameters and train algorithms' },
-    '/regression': { title: 'Regression Workspace', category: 'Workspace', subtitle: 'Continuous target modeling & residual evaluations' },
-    '/classification': { title: 'Classification Workspace', category: 'Workspace', subtitle: 'Categorical prediction, confusion matrix & ROC' },
-    '/comparison': { title: 'Model Comparison', category: 'Workspace', subtitle: 'Benchmark metrics across multiple models' },
-    '/history': { title: 'Model History', category: 'Workspace', subtitle: 'Audit log of all previously trained configurations' },
-    '/settings': { title: 'Settings', category: 'Preferences', subtitle: 'Platform configurations, theme and environment' },
+    '/': { title: 'Dashboard', category: 'Workspace' },
+    '/datasets': { title: 'Datasets', category: 'Workspace' },
+    '/train': { title: 'Model Training', category: 'Workspace' },
+    '/regression': { title: 'Regression Workspace', category: 'Workspace' },
+    '/classification': { title: 'Classification Workspace', category: 'Workspace' },
+    '/comparison': { title: 'Model Comparison', category: 'Workspace' },
+    '/history': { title: 'Model History', category: 'Workspace' },
+    '/settings': { title: 'Settings', category: 'Preferences' },
   };
 
   const currentRoute = routeTitles[location.pathname] || {
     title: 'Page',
-    category: 'ML Model Studio',
-    subtitle: ''
+    category: 'Workspace'
+  };
+
+  const isCurrentlyDark =
+    theme === 'dark' ||
+    (theme === 'system' &&
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  const handleToggleTheme = () => {
+    const nextTheme = isCurrentlyDark ? 'light' : 'dark';
+    setTheme(nextTheme);
+    addToast(`Switched to ${nextTheme === 'light' ? 'Light Mode' : 'Dark Mode'}.`, 'info');
   };
 
   const notifications = [
     {
       id: 1,
-      title: 'Phase 1 Frontend Ready',
-      desc: 'All 16 algorithms and 8 core pages initialized.',
-      time: 'Just now',
-      unread: true
+      title: 'Batch Training Ready',
+      desc: 'Multi-model parallel training pipeline enabled.',
+      time: 'Just now'
     },
     {
       id: 2,
-      title: 'Datasets Loaded',
-      desc: `${datasets.length} realistic sample datasets available for preview.`,
-      time: '10m ago',
-      unread: false
+      title: 'Workspace Active',
+      desc: `${datasets.length} datasets ready for training.`,
+      time: '10m ago'
     },
     {
       id: 3,
-      title: 'Comparison Engine',
-      desc: 'Multi-model metrics radar & benchmark charts active.',
-      time: '1h ago',
-      unread: false
+      title: 'Audit Log Synchronized',
+      desc: `${trainedModels.length} historical model checkpoints available.`,
+      time: '1h ago'
     }
   ];
 
   return (
-    <header className="sticky top-0 z-20 h-16 bg-white/95 backdrop-blur border-b border-slate-200 px-4 sm:px-6 flex items-center justify-between">
-      {/* Left: Mobile hamburger & Breadcrumbs */}
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-20 h-14 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-slate-200/90 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between transition-colors">
+      {/* Left: Mobile menu toggle & Breadcrumbs */}
+      <div className="flex items-center gap-2.5">
         <button
           onClick={() => setMobileOpen(true)}
-          className="md:hidden p-2 -ml-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+          className="md:hidden p-1.5 -ml-1 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
           aria-label="Open navigation menu"
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="w-4 h-4" />
         </button>
 
         {/* Breadcrumb Navigation */}
-        <div className="hidden sm:flex items-center gap-2 text-xs text-slate-500">
-          <span className="font-medium text-slate-400">{currentRoute.category}</span>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="font-semibold text-slate-800">{currentRoute.title}</span>
+        <div className="hidden sm:flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+          <span className="text-slate-400 dark:text-slate-500">{currentRoute.category}</span>
+          <ChevronRight className="w-3 h-3 text-slate-300 dark:text-slate-600" />
+          <span className="font-semibold text-slate-900 dark:text-slate-100">{currentRoute.title}</span>
         </div>
 
-        <h1 className="sm:hidden font-bold text-slate-900 text-base truncate">
+        <h1 className="sm:hidden font-bold text-slate-900 dark:text-slate-100 text-sm truncate">
           {currentRoute.title}
         </h1>
       </div>
 
-      {/* Center / Right: Search, Notifications, Phase Badge, Avatar */}
-      <div className="flex items-center gap-2 sm:gap-4">
-        {/* Search Bar Button */}
+      {/* Right: Search, Status, Theme Toggle, Notifications, Avatar */}
+      <div className="flex items-center gap-2 sm:gap-2.5">
+        {/* Search Command Palette Trigger */}
         <button
           onClick={onOpenSearch}
-          className="flex items-center gap-2 px-3 py-1.5 text-xs text-slate-500 bg-slate-100 hover:bg-slate-200/80 rounded-xl transition-colors border border-slate-200/60"
+          className="flex items-center gap-2 px-2.5 py-1 text-xs text-slate-500 dark:text-slate-400 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 rounded-lg transition-colors border border-slate-200/70 dark:border-slate-700"
         >
-          <Search className="w-3.5 h-3.5 text-slate-400" />
-          <span className="hidden md:inline">Quick search algorithms, datasets...</span>
-          <span className="md:hidden">Search</span>
-          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono text-slate-400 bg-white border border-slate-200 rounded-md">
+          <Search className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+          <span className="hidden md:inline">Search studio...</span>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.2 text-[10px] font-mono text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded">
             Ctrl K
           </kbd>
         </button>
 
-        {/* Phase 1 Demo Badge */}
-        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-          <span>Demo Simulation Mode</span>
+        {/* Subtle Status Pill */}
+        <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+          <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+          <span>Phase 1 Simulation</span>
         </div>
+
+        {/* Quick Theme Toggle Button */}
+        <button
+          type="button"
+          onClick={handleToggleTheme}
+          className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          title={`Active theme: ${theme} (${isCurrentlyDark ? 'Dark' : 'Light'}). Click to toggle.`}
+          aria-label="Toggle color theme"
+        >
+          {isCurrentlyDark ? (
+            <Sun className="w-4 h-4 text-amber-400" />
+          ) : (
+            <Moon className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+          )}
+        </button>
 
         {/* Notifications Popover */}
         <div className="relative">
@@ -116,60 +136,53 @@ export const Header = ({ isCollapsed, setMobileOpen, onOpenSearch }) => {
               setShowNotifications(!showNotifications);
               setShowUserMenu(false);
             }}
-            className="p-2 text-slate-500 hover:text-slate-800 rounded-xl hover:bg-slate-100 relative transition-colors"
+            className="p-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 relative transition-colors"
             title="Notifications"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-blue-600 ring-2 ring-white" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-blue-600 ring-2 ring-white dark:ring-slate-900" />
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-200 py-3 z-50 fade-in">
-              <div className="px-4 pb-2 border-b border-slate-100 flex items-center justify-between">
-                <span className="text-sm font-semibold text-slate-800">Notifications</span>
-                <span className="text-[11px] font-medium text-blue-600">3 updates</span>
+            <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 py-2 z-50 fade-in">
+              <div className="px-3 pb-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-800 dark:text-slate-100">Notifications</span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500">Activity Log</span>
               </div>
-              <div className="divide-y divide-slate-100 max-h-72 overflow-y-auto">
+              <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-60 overflow-y-auto">
                 {notifications.map((item) => (
-                  <div key={item.id} className="p-3 hover:bg-slate-50 transition-colors">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="text-xs font-semibold text-slate-800">{item.title}</p>
-                      <span className="text-[10px] text-slate-400 whitespace-nowrap">{item.time}</span>
+                  <div key={item.id} className="p-3 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors">
+                    <div className="flex items-start justify-between gap-1">
+                      <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">{item.title}</p>
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500 whitespace-nowrap">{item.time}</span>
                     </div>
-                    <p className="text-xs text-slate-500 mt-0.5 leading-snug">{item.desc}</p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{item.desc}</p>
                   </div>
                 ))}
-              </div>
-              <div className="px-4 pt-2 border-t border-slate-100 text-center">
-                <span className="text-xs text-slate-400">Phase 1 local activity log</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* User Profile Avatar & Dropdown */}
+        {/* User Profile Avatar */}
         <div className="relative">
           <button
             onClick={() => {
               setShowUserMenu(!showUserMenu);
               setShowNotifications(false);
             }}
-            className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-200"
+            className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-semibold text-xs shadow-sm">
-              MS
-            </div>
-            <div className="hidden sm:block text-left text-xs">
-              <div className="font-semibold text-slate-800 leading-tight">ML Researcher</div>
-              <div className="text-[10px] text-slate-400">Team Workspace</div>
+            <div className="w-7 h-7 rounded-lg bg-slate-900 dark:bg-slate-700 text-white font-semibold text-xs flex items-center justify-center">
+              ML
             </div>
           </button>
 
           {showUserMenu && (
-            <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-50 fade-in">
-              <div className="px-4 py-2 border-b border-slate-100">
-                <div className="text-xs font-semibold text-slate-900">Signed in as</div>
-                <div className="text-xs text-slate-500 truncate">researcher@mlstudio.io</div>
+            <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 py-1.5 z-50 fade-in">
+              <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800">
+                <div className="text-xs font-semibold text-slate-900 dark:text-slate-100">ML Researcher</div>
+                <div className="text-[11px] text-slate-400 dark:text-slate-500 truncate">researcher@mllab.io</div>
               </div>
               <div className="py-1">
                 <button
@@ -177,24 +190,21 @@ export const Header = ({ isCollapsed, setMobileOpen, onOpenSearch }) => {
                     navigate('/settings');
                     setShowUserMenu(false);
                   }}
-                  className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                  className="w-full text-left px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2"
                 >
-                  <Sliders className="w-3.5 h-3.5 text-slate-400" />
-                  Preferences & Settings
+                  <Sliders className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                  Studio Settings
                 </button>
                 <button
                   onClick={() => {
                     navigate('/history');
                     setShowUserMenu(false);
                   }}
-                  className="w-full text-left px-4 py-2 text-xs text-slate-700 hover:bg-slate-50 flex items-center gap-2"
+                  className="w-full text-left px-3 py-1.5 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
-                  Audit History ({trainedModels.length})
+                  <ShieldCheck className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                  Model History ({trainedModels.length})
                 </button>
-              </div>
-              <div className="px-4 py-2 border-t border-slate-100 text-[11px] text-slate-400">
-                Phase 1 Frontend Architecture
               </div>
             </div>
           )}

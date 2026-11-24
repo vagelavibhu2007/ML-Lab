@@ -15,17 +15,17 @@ export const ToastContainer = () => {
   };
 
   const styles = {
-    success: 'bg-emerald-50 border-emerald-200 text-emerald-900',
-    error: 'bg-rose-50 border-rose-200 text-rose-900',
-    warning: 'bg-amber-50 border-amber-200 text-amber-900',
-    info: 'bg-blue-50 border-blue-200 text-blue-900',
+    success: 'bg-emerald-50 dark:bg-emerald-950/90 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-100',
+    error: 'bg-rose-50 dark:bg-rose-950/90 border-rose-200 dark:border-rose-800 text-rose-900 dark:text-rose-100',
+    warning: 'bg-amber-50 dark:bg-amber-950/90 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-100',
+    info: 'bg-blue-50 dark:bg-blue-950/90 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-100',
   };
 
   const iconColors = {
-    success: 'text-emerald-600',
-    error: 'text-rose-600',
-    warning: 'text-amber-600',
-    info: 'text-blue-600',
+    success: 'text-emerald-600 dark:text-emerald-400',
+    error: 'text-rose-600 dark:text-rose-400',
+    warning: 'text-amber-600 dark:text-amber-400',
+    info: 'text-blue-600 dark:text-blue-400',
   };
 
   return (
@@ -45,7 +45,7 @@ export const ToastContainer = () => {
             </div>
             <button
               onClick={() => removeToast(toast.id)}
-              className="p-1 -mr-1 -mt-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-black/5"
+              className="p-1 -mr-1 -mt-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-black/5 dark:hover:bg-white/5"
             >
               <X className="w-3.5 h-3.5" />
             </button>

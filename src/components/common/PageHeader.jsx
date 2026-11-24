@@ -5,30 +5,30 @@ export const PageHeader = ({
   subtitle,
   actions,
   badge,
-  badgeColor = 'blue'
+  badgeColor = 'slate'
 }) => {
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6 border-b border-slate-200/80 mb-6">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-200/90 dark:border-slate-800 mb-5 transition-colors">
       <div>
-        <div className="flex items-center gap-2.5">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+        <div className="flex items-center gap-2">
+          <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100">
             {title}
           </h1>
           {badge && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
               {badge}
             </span>
           )}
         </div>
         {subtitle && (
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 leading-normal">
             {subtitle}
           </p>
         )}
       </div>
 
       {actions && (
-        <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
           {actions}
         </div>
       )}

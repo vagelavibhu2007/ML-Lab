@@ -15,46 +15,46 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm fade-in">
-      <div className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm fade-in">
+      <div className="w-full max-w-5xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90vh] transition-colors">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/50 border border-blue-100 dark:border-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <Database className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-slate-900">{dataset.name}</h2>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">{dataset.name}</h2>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
                   {dataset.task}
                 </span>
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                   {dataset.type}
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 {dataset.filename} • {dataset.rows?.toLocaleString()} rows • {dataset.columns} columns • {dataset.size}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+            className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Controls & Filter */}
-        <div className="px-6 py-2.5 border-b border-slate-100 bg-slate-50/50 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+        <div className="px-6 py-2.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
             <button
               onClick={() => setActiveTab('data')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'data'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
               Data Preview ({sampleRows.length} sample rows)
@@ -63,17 +63,17 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
               onClick={() => setActiveTab('schema')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'schema'
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
               }`}
             >
               Feature Schema ({columnDetails.length} columns)
             </button>
           </div>
 
-          <div className="text-xs text-slate-500 flex items-center gap-2">
-            <span className="font-medium text-slate-700">Target Column:</span>
-            <span className="font-mono bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md border border-blue-200">
+          <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+            <span className="font-medium text-slate-700 dark:text-slate-300">Target Column:</span>
+            <span className="font-mono bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-md border border-blue-200 dark:border-blue-800">
               {dataset.targetColumn || 'Not specified'}
             </span>
           </div>
@@ -84,25 +84,25 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
           {activeTab === 'data' ? (
             <div>
               {sampleRows.length > 0 ? (
-                <div className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
                   <div className="overflow-x-auto max-h-[55vh]">
                     <table className="w-full text-left text-xs border-collapse">
-                      <thead className="bg-slate-50 sticky top-0 border-b border-slate-200 text-slate-700">
+                      <thead className="bg-slate-50 dark:bg-slate-800 sticky top-0 border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
                         <tr>
-                          <th className="py-2.5 px-3 font-semibold text-slate-400 border-r border-slate-200 w-12 text-center">
+                          <th className="py-2.5 px-3 font-semibold text-slate-400 dark:text-slate-500 border-r border-slate-200 dark:border-slate-700 w-12 text-center">
                             #
                           </th>
                           {Object.keys(sampleRows[0]).map((col) => (
                             <th
                               key={col}
-                              className={`py-2.5 px-3 font-semibold whitespace-nowrap border-r border-slate-200 last:border-r-0 ${
-                                col === dataset.targetColumn ? 'bg-blue-50 text-blue-800' : ''
+                              className={`py-2.5 px-3 font-semibold whitespace-nowrap border-r border-slate-200 dark:border-slate-700 last:border-r-0 ${
+                                col === dataset.targetColumn ? 'bg-blue-50 dark:bg-blue-950/50 text-blue-800 dark:text-blue-300' : ''
                               }`}
                             >
                               <div className="flex items-center gap-1.5">
                                 <span>{col}</span>
                                 {col === dataset.targetColumn && (
-                                  <span className="text-[10px] px-1 rounded bg-blue-200 text-blue-900 font-normal">
+                                  <span className="text-[10px] px-1 rounded bg-blue-200 dark:bg-blue-900 text-blue-900 dark:text-blue-200 font-normal">
                                     Target
                                   </span>
                                 )}
@@ -111,19 +111,19 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
                         {sampleRows.map((row, idx) => (
-                          <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
-                            <td className="py-2 px-3 text-slate-400 border-r border-slate-100 text-center font-mono text-[11px]">
+                          <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/60 transition-colors">
+                            <td className="py-2 px-3 text-slate-400 dark:text-slate-500 border-r border-slate-100 dark:border-slate-800 text-center font-mono text-[11px]">
                               {idx + 1}
                             </td>
                             {Object.entries(row).map(([k, v], cellIdx) => (
                               <td
                                 key={cellIdx}
-                                className={`py-2 px-3 font-mono text-[11px] whitespace-nowrap border-r border-slate-100 last:border-r-0 ${
+                                className={`py-2 px-3 font-mono text-[11px] whitespace-nowrap border-r border-slate-100 dark:border-slate-800 last:border-r-0 ${
                                   k === dataset.targetColumn
-                                    ? 'bg-blue-50/30 text-blue-900 font-semibold'
-                                    : 'text-slate-700'
+                                    ? 'bg-blue-50/30 dark:bg-blue-950/30 text-blue-900 dark:text-blue-300 font-semibold'
+                                    : 'text-slate-700 dark:text-slate-300'
                                 }`}
                               >
                                 {String(v ?? '')}
@@ -136,7 +136,7 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-10 text-xs text-slate-500">
+                <div className="text-center py-10 text-xs text-slate-500 dark:text-slate-400">
                   No preview rows available for this dataset.
                 </div>
               )}
@@ -150,16 +150,16 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
                   placeholder="Filter feature columns..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="px-3 py-1.5 text-xs rounded-xl border border-slate-200 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                  className="px-3 py-1.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-slate-400 dark:text-slate-500">
                   Showing {filteredColumns.length} of {columnDetails.length} columns
                 </span>
               </div>
 
-              <div className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-700">
+                  <thead className="bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
                     <tr>
                       <th className="py-2.5 px-4 font-semibold">Feature / Column</th>
                       <th className="py-2.5 px-4 font-semibold">Data Type</th>
@@ -168,36 +168,36 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
                       <th className="py-2.5 px-4 font-semibold">Sample Value</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
                     {filteredColumns.map((col) => {
                       const isTarget = col.name === dataset.targetColumn;
                       return (
                         <tr
                           key={col.name}
-                          className={`hover:bg-slate-50/80 transition-colors ${
-                            isTarget ? 'bg-blue-50/40' : ''
+                          className={`hover:bg-slate-50/80 dark:hover:bg-slate-800/60 transition-colors ${
+                            isTarget ? 'bg-blue-50/40 dark:bg-blue-950/30' : ''
                           }`}
                         >
-                          <td className="py-2.5 px-4 font-semibold text-slate-800 flex items-center gap-2">
+                          <td className="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                             <span>{col.name}</span>
                             {isTarget && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 font-medium">
                                 Target Variable
                               </span>
                             )}
                           </td>
                           <td className="py-2.5 px-4">
-                            <span className="font-mono text-[11px] px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 border border-slate-200">
+                            <span className="font-mono text-[11px] px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                               {col.type}
                             </span>
                           </td>
-                          <td className="py-2.5 px-4 text-slate-600 font-mono">
+                          <td className="py-2.5 px-4 text-slate-600 dark:text-slate-400 font-mono">
                             {col.missing ?? 0}
                           </td>
-                          <td className="py-2.5 px-4 text-slate-600 font-mono">
+                          <td className="py-2.5 px-4 text-slate-600 dark:text-slate-400 font-mono">
                             {col.unique ?? 'N/A'}
                           </td>
-                          <td className="py-2.5 px-4 text-slate-500 font-mono text-[11px] truncate max-w-xs">
+                          <td className="py-2.5 px-4 text-slate-500 dark:text-slate-400 font-mono text-[11px] truncate max-w-xs">
                             {col.sample ?? '-'}
                           </td>
                         </tr>
@@ -211,11 +211,11 @@ export const DatasetPreviewModal = ({ dataset, isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+        <div className="px-6 py-4 bg-slate-50 dark:bg-slate-800/60 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
           <div>Client-side preview • Safe isolated data sandbox</div>
           <button
             onClick={onClose}
-            className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 rounded-xl transition-colors"
+            className="px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-colors"
           >
             Close Preview
           </button>

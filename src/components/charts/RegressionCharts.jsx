@@ -24,24 +24,16 @@ export const RegressionCharts = ({ metricsData }) => {
     featureImportance = []
   } = metricsData;
 
-  // Diagonal reference line data for Actual vs Predicted
-  const minVal = Math.min(...actualVsPredicted.map((d) => d.actual), 1.0);
-  const maxVal = Math.max(...actualVsPredicted.map((d) => d.actual), 5.0);
-  const lineData = [
-    { actual: minVal, predicted: minVal },
-    { actual: maxVal, predicted: maxVal }
-  ];
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* 1. Actual vs Predicted Plot */}
-      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
+      <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-bold text-slate-800">Actual vs Predicted Plot</h3>
-            <p className="text-xs text-slate-500">Points closer to the 45° diagonal indicate lower variance.</p>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Actual vs Predicted Plot</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Points closer to the 45° diagonal indicate lower variance.</p>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
             Scatter & Ideal Line
           </span>
         </div>
@@ -49,13 +41,13 @@ export const RegressionCharts = ({ metricsData }) => {
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 10, right: 15, bottom: 15, left: -15 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
               <XAxis
                 type="number"
                 dataKey="actual"
                 name="Actual"
                 domain={['auto', 'auto']}
-                tick={{ fontSize: 11, fill: '#64748b' }}
+                tick={{ fontSize: 11, fill: '#94a3b8' }}
                 label={{ value: 'Actual Values', position: 'insideBottom', offset: -5, fontSize: 11, fill: '#94a3b8' }}
               />
               <YAxis
@@ -63,7 +55,7 @@ export const RegressionCharts = ({ metricsData }) => {
                 dataKey="predicted"
                 name="Predicted"
                 domain={['auto', 'auto']}
-                tick={{ fontSize: 11, fill: '#64748b' }}
+                tick={{ fontSize: 11, fill: '#94a3b8' }}
                 label={{ value: 'Predicted Values', angle: -90, position: 'insideLeft', offset: 25, fontSize: 11, fill: '#94a3b8' }}
               />
               <Tooltip
@@ -72,7 +64,7 @@ export const RegressionCharts = ({ metricsData }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="p-2.5 rounded-xl bg-slate-900 text-white text-xs shadow-xl">
+                      <div className="p-2.5 rounded-xl bg-slate-900 text-white text-xs shadow-xl border border-slate-800">
                         <div>Actual: <span className="font-mono text-blue-300">{data.actual}</span></div>
                         <div>Predicted: <span className="font-mono text-emerald-300">{data.predicted}</span></div>
                         <div className="text-[10px] text-slate-400 mt-1">
@@ -91,13 +83,13 @@ export const RegressionCharts = ({ metricsData }) => {
       </div>
 
       {/* 2. Residual Plot */}
-      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
+      <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-bold text-slate-800">Residual Plot (Error vs Predicted)</h3>
-            <p className="text-xs text-slate-500">Residuals randomly dispersed around zero imply homoscedasticity.</p>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Residual Plot (Error vs Predicted)</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Residuals randomly dispersed around zero imply homoscedasticity.</p>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
             Zero-line reference
           </span>
         </div>
@@ -105,19 +97,19 @@ export const RegressionCharts = ({ metricsData }) => {
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <ScatterChart margin={{ top: 10, right: 15, bottom: 15, left: -15 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.3} />
               <XAxis
                 type="number"
                 dataKey="predicted"
                 name="Predicted"
-                tick={{ fontSize: 11, fill: '#64748b' }}
+                tick={{ fontSize: 11, fill: '#94a3b8' }}
                 label={{ value: 'Predicted Target', position: 'insideBottom', offset: -5, fontSize: 11, fill: '#94a3b8' }}
               />
               <YAxis
                 type="number"
                 dataKey="residual"
                 name="Residual"
-                tick={{ fontSize: 11, fill: '#64748b' }}
+                tick={{ fontSize: 11, fill: '#94a3b8' }}
                 label={{ value: 'Residual (y - ŷ)', angle: -90, position: 'insideLeft', offset: 25, fontSize: 11, fill: '#94a3b8' }}
               />
               <Tooltip
@@ -126,7 +118,7 @@ export const RegressionCharts = ({ metricsData }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="p-2.5 rounded-xl bg-slate-900 text-white text-xs shadow-xl">
+                      <div className="p-2.5 rounded-xl bg-slate-900 text-white text-xs shadow-xl border border-slate-800">
                         <div>Predicted: <span className="font-mono">{data.predicted}</span></div>
                         <div>Residual: <span className={`font-mono ${data.residual >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>{data.residual}</span></div>
                       </div>
@@ -142,13 +134,13 @@ export const RegressionCharts = ({ metricsData }) => {
       </div>
 
       {/* 3. Error Distribution (Histogram) */}
-      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
+      <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-bold text-slate-800">Residual Error Distribution</h3>
-            <p className="text-xs text-slate-500">Frequency of errors; bell curve reflects normally distributed noise.</p>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Residual Error Distribution</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Frequency of errors; bell curve reflects normally distributed noise.</p>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
             Error Bins
           </span>
         </div>
@@ -156,15 +148,15 @@ export const RegressionCharts = ({ metricsData }) => {
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={errorDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 15 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-              <XAxis dataKey="range" tick={{ fontSize: 11, fill: '#64748b' }} />
-              <YAxis tick={{ fontSize: 11, fill: '#64748b' }} />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.3} />
+              <XAxis dataKey="range" tick={{ fontSize: 11, fill: '#94a3b8' }} />
+              <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} />
               <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="p-2 rounded-xl bg-slate-900 text-white text-xs">
+                      <div className="p-2 rounded-xl bg-slate-900 text-white text-xs border border-slate-800">
                         <div>Bin: {data.range}</div>
                         <div className="font-bold text-blue-400 font-mono mt-0.5">{data.count} samples</div>
                       </div>
@@ -180,13 +172,13 @@ export const RegressionCharts = ({ metricsData }) => {
       </div>
 
       {/* 4. Feature Importance */}
-      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
+      <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm transition-colors">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-sm font-bold text-slate-800">Feature Importance Ranking</h3>
-            <p className="text-xs text-slate-500">Gini / permutation importance contributions of input features.</p>
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">Feature Importance Ranking</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Gini / permutation importance contributions of input features.</p>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
             Top Predictors
           </span>
         </div>
@@ -198,12 +190,12 @@ export const RegressionCharts = ({ metricsData }) => {
               data={featureImportance}
               margin={{ top: 5, right: 25, left: 40, bottom: 5 }}
             >
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-              <XAxis type="number" domain={[0, 'dataMax + 0.1']} tick={{ fontSize: 11, fill: '#64748b' }} />
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#334155" opacity={0.3} />
+              <XAxis type="number" domain={[0, 'dataMax + 0.1']} tick={{ fontSize: 11, fill: '#94a3b8' }} />
               <YAxis
                 type="category"
                 dataKey="feature"
-                tick={{ fontSize: 11, fill: '#334155' }}
+                tick={{ fontSize: 11, fill: '#94a3b8' }}
                 width={85}
               />
               <Tooltip
@@ -211,7 +203,7 @@ export const RegressionCharts = ({ metricsData }) => {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="p-2 rounded-xl bg-slate-900 text-white text-xs">
+                      <div className="p-2 rounded-xl bg-slate-900 text-white text-xs border border-slate-800">
                         <div className="font-semibold">{data.feature}</div>
                         <div className="text-blue-300 font-mono mt-0.5">
                           Importance: {(data.importance * 100).toFixed(1)}%

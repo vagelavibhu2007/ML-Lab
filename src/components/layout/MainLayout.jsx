@@ -11,7 +11,7 @@ export const MainLayout = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50/70 dark:bg-slate-950 flex flex-col font-sans transition-colors duration-150">
       {/* Sidebar navigation */}
       <Sidebar
         isCollapsed={isCollapsed}
@@ -22,8 +22,8 @@ export const MainLayout = () => {
 
       {/* Main Container Area with dynamic left margin matching sidebar */}
       <div
-        className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
-          isCollapsed ? 'md:ml-20' : 'md:ml-64'
+        className={`flex-1 flex flex-col transition-all duration-200 ease-in-out ${
+          isCollapsed ? 'md:ml-16' : 'md:ml-60'
         }`}
       >
         {/* Top Header */}
@@ -34,19 +34,19 @@ export const MainLayout = () => {
         />
 
         {/* Page Content Viewport */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main className="flex-1 p-4 sm:p-5 lg:p-6 max-w-7xl w-full mx-auto">
           <Outlet />
         </main>
 
         {/* Global Footer */}
-        <footer className="py-4 px-6 border-t border-slate-200/60 bg-white/50 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl w-full mx-auto">
+        <footer className="py-3 px-6 border-t border-slate-200/70 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 text-xs text-slate-400 dark:text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 max-w-7xl w-full mx-auto transition-colors">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-700">ML Model Studio</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-300">ML Model Studio</span>
             <span>•</span>
-            <span>Phase 1 Frontend Prototype</span>
+            <span>Phase 1 Frontend</span>
           </div>
-          <div>
-            Built with React, Vite & Tailwind CSS • Modular ML Architecture
+          <div className="text-[11px] text-slate-400 dark:text-slate-500">
+            Multi-Model Training & Evaluation Dashboard
           </div>
         </footer>
       </div>

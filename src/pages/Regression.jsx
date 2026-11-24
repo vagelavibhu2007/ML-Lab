@@ -5,7 +5,6 @@ import {
   Cpu,
   Database,
   Sliders,
-  Sparkles,
   Info,
   RefreshCw,
   Layers,
@@ -23,7 +22,7 @@ import { RegressionCharts } from '../components/charts/RegressionCharts';
 
 export const Regression = () => {
   const navigate = useNavigate();
-  const { datasets, trainedModels } = useML();
+  const { datasets } = useML();
 
   // Filter regression datasets
   const regressionDatasets = datasets.filter((d) => d.task === 'Regression');
@@ -69,51 +68,51 @@ export const Regression = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PageHeader
         title="Regression Modeling Workspace"
-        subtitle="Train continuous target estimators, inspect residual errors, and benchmark predictive variance."
-        badge="Continuous Target Workspace"
+        subtitle="Evaluate continuous target estimators, inspect residual distributions, and analyze predictive variance."
+        badge="Continuous Modeling"
         actions={
           <div className="flex items-center gap-2">
             <button
               onClick={handleUpdateEvaluation}
-              className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-xl transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors shadow-xs"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-blue-600" />
-              <span>Simulate Re-Evaluation</span>
+              <RefreshCw className="w-3.5 h-3.5 text-slate-600 dark:text-slate-300" />
+              <span>Simulate Evaluation</span>
             </button>
             <button
               onClick={() => navigate('/train')}
-              className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-xs"
             >
               <Cpu className="w-3.5 h-3.5" />
-              <span>Launch Studio Trainer</span>
+              <span>Train in Studio</span>
             </button>
           </div>
         }
       />
 
       {/* Demonstration metrics notice */}
-      <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 flex items-start gap-3">
-        <Sparkles className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-        <div className="text-xs text-blue-900 leading-relaxed">
-          <span className="font-bold">Demonstration Regression Metrics:</span> Displaying simulated model evaluation curves for <span className="font-semibold">{selectedAlgorithm.name}</span> on dataset <span className="font-semibold">{selectedDataset?.name}</span>. Real-time Scikit-Learn training pipelines and live residual calculation will integrate in Phase 2.
+      <div className="p-3.5 rounded-xl bg-slate-100/70 dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex items-start gap-2.5 transition-colors">
+        <Info className="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0 mt-0.5" />
+        <div className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <span className="font-semibold text-slate-800 dark:text-slate-200">Simulated Regression Metrics:</span> Displaying simulated model evaluation curves for <span className="font-semibold text-slate-900 dark:text-slate-100">{selectedAlgorithm.name}</span> on dataset <span className="font-semibold text-slate-900 dark:text-slate-100">{selectedDataset?.name}</span>. Full backend training will calculate live residuals in Phase 2.
         </div>
       </div>
 
       {/* Top Controls: Algorithm Picker, Dataset & Hyperparameters Panel */}
-      <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm space-y-5">
+      <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-4 transition-colors">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Algorithm Dropdown */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
               Regression Algorithm ({REGRESSION_ALGORITHMS.length} options)
             </label>
             <select
               value={selectedAlgorithmId}
               onChange={(e) => handleAlgorithmChange(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium"
+              className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium text-slate-800 dark:text-slate-200"
             >
               {REGRESSION_ALGORITHMS.map((algo) => (
                 <option key={algo.id} value={algo.id}>
@@ -121,18 +120,18 @@ export const Regression = () => {
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-400 mt-1">{selectedAlgorithm.description}</p>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">{selectedAlgorithm.description}</p>
           </div>
 
           {/* Dataset Selector */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
               Active Dataset & Target
             </label>
             <select
               value={selectedDatasetId}
               onChange={(e) => setSelectedDatasetId(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium"
+              className="w-full px-3 py-1.5 text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium text-slate-800 dark:text-slate-200"
             >
               {datasets.map((ds) => (
                 <option key={ds.id} value={ds.id}>
@@ -140,26 +139,26 @@ export const Regression = () => {
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-1">
               {selectedDataset?.rows?.toLocaleString()} rows • {selectedDataset?.columns} features
             </p>
           </div>
         </div>
 
         {/* Hyperparameter Quick Tuning bar */}
-        <div className="pt-3 border-t border-slate-100">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-              <Sliders className="w-3.5 h-3.5 text-blue-600" />
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-between mb-2.5">
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <Sliders className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
               <span>Hyperparameters ({selectedAlgorithm.name})</span>
             </span>
-            <span className="text-[10px] text-slate-400 font-mono">Dynamic schema</span>
+            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">Dynamic schema</span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             {selectedAlgorithm.hyperparameters?.map((param) => (
-              <div key={param.name} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                <div className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1 truncate">
+              <div key={param.name} className="p-2 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700">
+                <div className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1 truncate">
                   {param.label}
                 </div>
                 {param.type === 'number' && (
@@ -172,7 +171,7 @@ export const Regression = () => {
                     onChange={(e) =>
                       setHyperparameters({ ...hyperparameters, [param.name]: Number(e.target.value) })
                     }
-                    className="w-full px-2 py-1 text-xs rounded-lg border border-slate-200 bg-white font-mono"
+                    className="w-full px-2 py-1 text-xs rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-mono"
                   />
                 )}
                 {param.type === 'select' && (
@@ -181,7 +180,7 @@ export const Regression = () => {
                     onChange={(e) =>
                       setHyperparameters({ ...hyperparameters, [param.name]: e.target.value })
                     }
-                    className="w-full px-2 py-1 text-xs rounded-lg border border-slate-200 bg-white"
+                    className="w-full px-2 py-1 text-xs rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100"
                   >
                     {param.options?.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -191,7 +190,7 @@ export const Regression = () => {
                   </select>
                 )}
                 {param.type === 'boolean' && (
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-1.5 mt-1">
                     <input
                       type="checkbox"
                       checked={Boolean(hyperparameters[param.name] ?? param.default)}
@@ -200,7 +199,7 @@ export const Regression = () => {
                       }
                       className="w-3.5 h-3.5 text-blue-600 rounded"
                     />
-                    <span className="text-xs text-slate-700">True</span>
+                    <span className="text-xs text-slate-700 dark:text-slate-300">True</span>
                   </div>
                 )}
               </div>
@@ -211,48 +210,48 @@ export const Regression = () => {
 
       {/* Regression Metrics 5-Card Dashboard */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold text-slate-800">
+        <div className="flex items-center justify-between mb-2.5">
+          <h2 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
             Regression Evaluation Metrics
           </h2>
-          <span className="text-xs text-slate-400">Calculated on holdout validation split (20%)</span>
+          <span className="text-[11px] text-slate-400 dark:text-slate-500">Calculated on holdout test split</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           <MetricCard
             title="R² Score"
             value={metricsData.metrics.r2.toFixed(4)}
-            subtitle="Coefficient of determination"
-            tooltip="Proportion of the variance in the dependent variable that is predictable from the independent variables (1.0 is optimal)."
+            subtitle="Variance explained (0-1)"
+            tooltip="Coefficient of determination: proportion of variance predictable from features."
             badge="Higher is better"
             highlight={true}
           />
           <MetricCard
             title="Adjusted R²"
             value={metricsData.metrics.adjustedR2.toFixed(4)}
-            subtitle="Penalized for feature count"
-            tooltip="Adjusted R-squared penalizes the score for adding non-contributing features."
+            subtitle="Feature-count penalized"
+            tooltip="Adjusted R-squared penalizes non-contributing features."
             badge="Higher is better"
           />
           <MetricCard
             title="MAE"
             value={metricsData.metrics.mae.toFixed(4)}
             subtitle="Mean Absolute Error"
-            tooltip="Average magnitude of the errors without considering their direction. Lower values are desirable."
+            tooltip="Average magnitude of the absolute error residuals."
             badge="Lower is better"
           />
           <MetricCard
             title="MSE"
             value={metricsData.metrics.mse.toFixed(4)}
             subtitle="Mean Squared Error"
-            tooltip="Average squared difference between predicted and actual values. Heavily penalizes large outliers."
+            tooltip="Average squared difference between predicted and actual values."
             badge="Lower is better"
           />
           <MetricCard
             title="RMSE"
             value={metricsData.metrics.rmse.toFixed(4)}
             subtitle="Root Mean Squared Error"
-            tooltip="Square root of the MSE; measured in the same units as the target variable."
+            tooltip="Square root of MSE; measured in target units."
             badge="Lower is better"
           />
         </div>
@@ -260,11 +259,11 @@ export const Regression = () => {
 
       {/* Visualizations Section: 4 Interactive Charts */}
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold text-slate-800">
+        <div className="flex items-center justify-between mb-2.5">
+          <h2 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
             Regression Diagnostics & Plots
           </h2>
-          <span className="text-xs text-slate-400">Interactive visual inspections</span>
+          <span className="text-[11px] text-slate-400 dark:text-slate-500">Interactive visual diagnostics</span>
         </div>
 
         <RegressionCharts metricsData={metricsData} />

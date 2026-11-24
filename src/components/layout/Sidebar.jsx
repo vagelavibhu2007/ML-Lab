@@ -12,7 +12,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Boxes,
-  Sparkles,
   X
 } from 'lucide-react';
 
@@ -32,20 +31,20 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
   ];
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-white border-r border-slate-200 select-none">
+    <div className="flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200/90 dark:border-slate-800 select-none transition-colors">
       {/* Brand Header */}
-      <div className="flex items-center justify-between h-16 px-4 border-b border-slate-100">
-        <div className="flex items-center gap-3 overflow-hidden">
-          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-blue-600 text-white shadow-sm shadow-blue-500/20 shrink-0">
-            <Boxes className="w-5 h-5" />
+      <div className="flex items-center justify-between h-14 px-4 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center gap-2.5 overflow-hidden">
+          <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-blue-600 text-white shrink-0 shadow-xs">
+            <Boxes className="w-4 h-4" />
           </div>
           {(!isCollapsed || mobileOpen) && (
             <div className="flex flex-col min-w-0">
-              <span className="font-bold text-slate-900 tracking-tight text-base truncate">
+              <span className="font-bold text-slate-900 dark:text-slate-100 tracking-tight text-sm truncate">
                 ML Model Studio
               </span>
-              <span className="text-[11px] font-medium text-blue-600 flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> v1.0 • Phase 1
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">
+                Phase 1 Prototype
               </span>
             </div>
           )}
@@ -55,23 +54,23 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
         {mobileOpen && (
           <button
             onClick={() => setMobileOpen(false)}
-            className="md:hidden p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+            className="md:hidden p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
 
       {/* Navigation Sections */}
-      <div className="flex-1 py-4 px-3 space-y-6 overflow-y-auto">
+      <div className="flex-1 py-3 px-2.5 space-y-5 overflow-y-auto">
         {/* Workspace Section */}
         <div>
           {(!isCollapsed || mobileOpen) && (
-            <div className="px-3 mb-2 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+            <div className="px-2.5 mb-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
               Workspace
             </div>
           )}
-          <nav className="space-y-1">
+          <nav className="space-y-0.5">
             {workspaceNav.map((item) => {
               const Icon = item.icon;
               return (
@@ -81,25 +80,22 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
                   onClick={() => mobileOpen && setMobileOpen(false)}
                   title={isCollapsed && !mobileOpen ? item.name : undefined}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all group ${
+                    `flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors group ${
                       isActive
-                        ? 'bg-blue-50 text-blue-700 shadow-sm border border-blue-100/80 font-semibold'
-                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
-                    } ${isCollapsed && !mobileOpen ? 'justify-center px-2' : ''}`
+                        ? 'bg-blue-50/80 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 font-semibold border-l-2 border-blue-600 dark:border-blue-500 rounded-l-none'
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-slate-100'
+                    } ${isCollapsed && !mobileOpen ? 'justify-center px-1' : ''}`
                   }
                 >
                   {({ isActive }) => (
                     <>
                       <Icon
-                        className={`w-4 h-4 shrink-0 transition-colors ${
-                          isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-700'
+                        className={`w-4 h-4 shrink-0 ${
+                          isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'
                         }`}
                       />
                       {(!isCollapsed || mobileOpen) && (
                         <span className="truncate">{item.name}</span>
-                      )}
-                      {isActive && (!isCollapsed || mobileOpen) && (
-                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />
                       )}
                     </>
                   )}
@@ -112,11 +108,11 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
         {/* Preferences Section */}
         <div>
           {(!isCollapsed || mobileOpen) && (
-            <div className="px-3 mb-2 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+            <div className="px-2.5 mb-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
               Preferences
             </div>
           )}
-          <nav className="space-y-1">
+          <nav className="space-y-0.5">
             {preferencesNav.map((item) => {
               const Icon = item.icon;
               return (
@@ -126,25 +122,22 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
                   onClick={() => mobileOpen && setMobileOpen(false)}
                   title={isCollapsed && !mobileOpen ? item.name : undefined}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all group ${
+                    `flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors group ${
                       isActive
-                        ? 'bg-blue-50 text-blue-700 shadow-sm border border-blue-100/80 font-semibold'
-                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
-                    } ${isCollapsed && !mobileOpen ? 'justify-center px-2' : ''}`
+                        ? 'bg-blue-50/80 dark:bg-blue-950/40 text-blue-900 dark:text-blue-300 font-semibold border-l-2 border-blue-600 dark:border-blue-500 rounded-l-none'
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-slate-100'
+                    } ${isCollapsed && !mobileOpen ? 'justify-center px-1' : ''}`
                   }
                 >
                   {({ isActive }) => (
                     <>
                       <Icon
-                        className={`w-4 h-4 shrink-0 transition-colors ${
-                          isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-700'
+                        className={`w-4 h-4 shrink-0 ${
+                          isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500 group-hover:text-slate-600 dark:group-hover:text-slate-300'
                         }`}
                       />
                       {(!isCollapsed || mobileOpen) && (
                         <span className="truncate">{item.name}</span>
-                      )}
-                      {isActive && (!isCollapsed || mobileOpen) && (
-                        <span className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-600" />
                       )}
                     </>
                   )}
@@ -156,37 +149,37 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
       </div>
 
       {/* Footer / Status Card */}
-      <div className="p-3 border-t border-slate-100">
+      <div className="p-3 border-t border-slate-100 dark:border-slate-800">
         {(!isCollapsed || mobileOpen) ? (
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-semibold text-slate-800">Phase 1 UI Status</span>
-              <span className="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Active
+          <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+            <div className="flex items-center justify-between mb-0.5">
+              <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">Client Runtime</span>
+              <span className="text-[10px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-1.5 py-0.2 rounded border border-emerald-200 dark:border-emerald-800">
+                Ready
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 leading-tight">
-              Frontend sandbox mode with local dataset processing and interactive visualizations.
+            <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-tight">
+              Local isolated environment with CSV parsing and simulation.
             </p>
           </div>
         ) : (
           <div className="flex justify-center">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" title="Phase 1 Active" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500" title="Client Runtime Ready" />
           </div>
         )}
 
         {/* Desktop Collapse Toggle */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden md:flex items-center justify-center w-full mt-2 py-1.5 text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+          className="hidden md:flex items-center justify-center w-full mt-2 py-1 text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
           title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {isCollapsed ? (
             <ChevronRight className="w-4 h-4" />
           ) : (
             <div className="flex items-center gap-1.5">
-              <ChevronLeft className="w-4 h-4" />
-              <span>Collapse sidebar</span>
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span className="text-[11px]">Collapse sidebar</span>
             </div>
           )}
         </button>
@@ -198,8 +191,8 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
     <>
       {/* Desktop Persistent Sidebar */}
       <aside
-        className={`hidden md:block fixed top-0 left-0 bottom-0 z-30 transition-all duration-300 ease-in-out ${
-          isCollapsed ? 'w-20' : 'w-64'
+        className={`hidden md:block fixed top-0 left-0 bottom-0 z-30 transition-all duration-200 ease-in-out ${
+          isCollapsed ? 'w-16' : 'w-60'
         }`}
       >
         {sidebarContent}
@@ -209,13 +202,13 @@ export const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
-          className="md:hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+          className="md:hidden fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-xs transition-opacity"
         />
       )}
 
       {/* Mobile Drawer */}
       <aside
-        className={`md:hidden fixed top-0 bottom-0 left-0 z-50 w-72 max-w-[85vw] transform transition-transform duration-300 ease-in-out ${
+        className={`md:hidden fixed top-0 bottom-0 left-0 z-50 w-64 max-w-[80vw] transform transition-transform duration-200 ease-in-out ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
