@@ -1,4 +1,4 @@
-# ML Lab 🚀
+# ML Model Studio 🚀
 > Interactive Machine Learning Model Training and Evaluation Platform (Phase 1 Frontend)
 
 ML Model Studio is a modern, responsive SaaS-style web application designed for interactive machine learning model configuration, dataset inspection, evaluation benchmarking, and algorithm comparison.
